@@ -3,14 +3,12 @@ module.exports = rangeSlider;
 var id = 0;
 
 function rangeSlider(opts, protocol) {
-  const { min = 0, max = 500, id = 0 } = opts;
-  const name = `range-${id}`;
+  const { min = 0, max = 1000 } = opts;
 
-  const el = document.createElement("div");
-  el.classList.add("container");
-  const shadow = el.attachShadow({ mode: "closed" });
+  const name = `range-${id++}`;
 
   const notify = protocol({ from: name }, listen);
+
   function listen(message) {
     const { type, data } = message;
     if (type === "update") {
@@ -19,6 +17,9 @@ function rangeSlider(opts, protocol) {
       input.focus();
     }
   }
+  const el = document.createElement("div");
+  el.classList.add("container");
+  const shadow = el.attachShadow({ mode: "closed" });
 
   const input = document.createElement("input");
   input.type = "range";
@@ -45,8 +46,15 @@ function rangeSlider(opts, protocol) {
   shadow.append(style, input, bar);
   return el;
 
-  function get_theme() {
-    return `
+  function handle_input(e) {
+    const val = Number(e.target.value);
+    fill.style.width = `${(val / max) * 100}%`;
+    notify({ from: name, type: "update", data: val });
+  }
+}
+
+function get_theme() {
+  return `
   :host { box-sizing: border-box; }
   *, *:before, *:after { box-sizing: inherit; }
   :host {
@@ -135,11 +143,4 @@ function rangeSlider(opts, protocol) {
     box-shadow: 0 0 0 14px rgba(94, 176, 245, .8);
   }
   `;
-  }
-
-  function handle_input(e) {
-    const val = Number(e.target.value);
-    fill.style.width = `${(val / max) * 100}%`;
-    notify({ from: name, type: "update", data: val });
-  }
 }
