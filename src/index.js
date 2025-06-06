@@ -11,7 +11,6 @@ function rangeSlider(opts, protocol) {
   const shadow = el.attachShadow({ mode: "closed" });
 
   const notify = protocol({ from: name }, listen);
-
   function listen(message) {
     const { type, data } = message;
     if (type === "update") {
