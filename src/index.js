@@ -1,11 +1,26 @@
 module.exports = rangeSlider;
 
+var id = 0;
+
 function rangeSlider(opts, protocol) {
   const { min = 0, max = 500 } = opts;
+
+  const name = `range-${id++}`;
 
   const el = document.createElement("div");
   el.classList.add("container");
   const shadow = el.attachShadow({ mode: "closed" });
+
+  const notify = protocol({ from: name }, listen);
+
+  function listen(message) {
+    const { type, data } = message;
+    if (type === "update") {
+      input.value = data;
+      fill.style.width = `${(data / max) * 100}%`;
+      input.focus();
+    }
+  }
 
   const input = document.createElement("input");
   input.type = "range";
@@ -127,5 +142,6 @@ function rangeSlider(opts, protocol) {
   function handle_input(e) {
     const val = Number(e.target.value);
     fill.style.width = `${(val / max) * 100}%`;
+    notify({ from: name, type: "update", data: val });
   }
 }
