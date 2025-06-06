@@ -3,9 +3,8 @@ module.exports = rangeSlider;
 var id = 0;
 
 function rangeSlider(opts, protocol) {
-  const { min = 0, max = 500 } = opts;
-
-  const name = `range-${id++}`;
+  const { min = 0, max = 500, id = 0 } = opts;
+  const name = `range-${id}`;
 
   const el = document.createElement("div");
   el.classList.add("container");
