@@ -21,7 +21,7 @@ function rangeSlider(opts, protocol) {
   el.classList.add("container");
   const shadow = el.attachShadow({ mode: "closed" });
 
-  const input = document.createElement("input");
+  let input = document.createElement("input");
   input.type = "range";
   input.min = min;
   input.max = max;
@@ -35,7 +35,7 @@ function rangeSlider(opts, protocol) {
   const ruler = document.createElement("div");
   ruler.classList.add("ruler");
 
-  const fill = document.createElement("div");
+  let fill = document.createElement("div");
   fill.classList.add("fill");
 
   bar.append(ruler, fill);
